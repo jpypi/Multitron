@@ -6,14 +6,14 @@ import pickle
 train, validate, test = np.array(pickle.load(open("littlemnist.pkl", "rb"), encoding = "latin1"))
 
 # Set out learning rate
-alpha = 1
+alpha = 0.5
 
 n_classes = 10
 dim_data  = len(train[0][0])
 
 # Initialize random weights (+1 to dim_data for bias)
-#w = np.random.rand(n_classes, dim_data + 1)
-w = np.zeros((n_classes, dim_data + 1))
+w = np.random.rand(n_classes, dim_data + 1)
+#w = np.zeros((n_classes, dim_data + 1))
 
 train[0] = np.c_[train[0], np.ones((len(train[0]), 1))]
 validate[0] = np.c_[validate[0], np.ones((len(validate[0]), 1))]
@@ -28,14 +28,15 @@ def oneHot(index):
     return a
 
 def Validate():
-    correct = sum((np.argmax(classify(x)) + 1) == validate[1][x_i] for x_i, x in enumerate(validate[0]))
+    correct = sum((np.argmax(classify(x))) == validate[1][x_i] for x_i, x in enumerate(validate[0]))
     print("Correct: %d"%correct)
 
 #error = np.sum(x[:,1] - list(map(classify, x[:,0])))/len(x)
 Validate()
 z10 = np.zeros((10,1))
 
-for iteration in range(80):
+iteration = 0
+while True:
     correct = 0
     # Enumerate training examples
     for x_i, x in enumerate(train[0]):
@@ -44,7 +45,8 @@ for iteration in range(80):
 
         # Move a proportion (alpha) of the difference between where we want to be
         # and where we are
-        delta = (d - oneHot(np.argmax(np.reshape(y, (10,1)))))
+        delta = d - oneHot(np.argmax(np.reshape(y, (10,1))))
+        #delta = d - np.reshape(y, (10,1))
         w += alpha * delta * x
         correct += np.alltrue(delta == z10)
         #error = np.sum(x[:train_samples,1] - list(map(classify, x[:train_samples,0])))/len(x)
@@ -53,8 +55,7 @@ for iteration in range(80):
         print("Train right: %d"%correct)
         Validate()
 
-
-#print("Error: {}".format(error))
+    iteration += 1
 
 
 #right = 0
