@@ -2,7 +2,9 @@ A multitron implementation using numpy that achieves roughly 85% to 88% accuracy
 
 ## N.B.
 
-You will need the `littlemnist.pkl` file which has a structure such as follows:
+You will need the `littlemnist.pkl` file (can be found
+[here](http://perplexed.duckdns.org/littlemnist.pkl)) which has a structure such
+as follows:
 ```
 [ train, validation, test ]
 ```
